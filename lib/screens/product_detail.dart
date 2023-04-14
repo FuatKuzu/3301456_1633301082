@@ -1,12 +1,14 @@
 import 'package:flutter/material.dart';
-import 'package:font_awesome_flutter/font_awesome_flutter.dart';
 import 'package:google_fonts/google_fonts.dart';
-import 'package:sea/screens/main_screen.dart';
 import 'package:url_launcher/url_launcher.dart';
+import 'login_page.dart';
+import 'package:sea/screens/profile.dart';
 
 class Product_Detail extends StatefulWidget {
-  const Product_Detail({Key? key, required this.product}) : super(key: key);
+  Product_Detail({Key? key, required this.product, this.account})
+      : super(key: key);
   final Map? product;
+  String? account;
 
   @override
   State<Product_Detail> createState() => _Product_DetailState();
@@ -50,93 +52,157 @@ _launchURLYoutube() async {
 
 class _Product_DetailState extends State<Product_Detail> {
   var _height = 500.0;
+  var _width = 440;
+
   @override
   Widget build(BuildContext context) {
+    var product_price = double.parse(widget.product!['price']);
+
+    debugShowCheckedModeBanner:
+    false;
     return Scaffold(
       appBar: AppBar(
-        title: Text('Derin Sular'),
-        actions: <Widget>[
-          IconButton(
-            icon: const Icon(Icons.shopping_cart),
-            tooltip: 'Show Snackbar',
-            onPressed: () {
-              ScaffoldMessenger.of(context).showSnackBar(
-                  const SnackBar(content: Text('This is a snackbar')));
-            },
+        title: Text(
+          'Derin Sular',
+          style: GoogleFonts.ptSerif(
+            fontSize: 22,
+            fontWeight: FontWeight.w500,
           ),
-          IconButton(
-            icon: const Icon(Icons.person),
-            tooltip: 'Show Snackbar',
-            onPressed: () {
-              ScaffoldMessenger.of(context).showSnackBar(
-                  const SnackBar(content: Text('This is a snackbar')));
-            },
-          ),
-          IconButton(
-            icon: const Icon(Icons.navigate_next),
-            tooltip: 'Go to the next page',
-            onPressed: () {
-              Navigator.push(context, MaterialPageRoute<void>(
-                builder: (BuildContext context) {
-                  return Scaffold(
-                    appBar: AppBar(
-                      title: const Text('Next page'),
-                    ),
-                    body: const Center(
-                      child: Text(
-                        'This is the next page',
-                        style: TextStyle(fontSize: 24),
-                      ),
-                    ),
-                  );
-                },
-              ));
-            },
-          ),
-        ],
+        ),
+        actions: <Widget>[],
       ),
-      body: SafeArea(
-        /*  child: Container(
-        height: MediaQuery.of(context).size.height / 2.5,
-        // width: 500,
-
-        decoration: BoxDecoration(
-          color: Colors.blueAccent.shade100,
-          borderRadius: BorderRadius.circular(20.0),
-        ),*/
+      body: Container(
+        alignment: Alignment.topCenter,
+        decoration: BoxDecoration(color: Colors.blue.shade100),
         child: Column(
+          mainAxisAlignment: MainAxisAlignment.start,
           children: [
+            Padding(padding: EdgeInsets.only(top: 20)),
             Container(
-              height: MediaQuery.of(context).size.height / 2.5,
               decoration: BoxDecoration(
                 color: Colors.blueAccent.shade100,
                 borderRadius: BorderRadius.circular(20.0),
               ),
               child: Column(children: [
+                Padding(padding: EdgeInsets.only(top: 20)),
                 ClipRRect(
                   borderRadius: BorderRadius.circular(30.0),
                   child: Image.asset(
                     widget.product!['images'],
-                    width: _height - 150,
-                    height: _height - 150,
+                    width: _width - 70.0,
                     fit: BoxFit.cover,
                   ),
                 ),
+                Padding(padding: EdgeInsets.only(top: 20)),
                 SizedBox(
-                    height: _height / 4,
-                    width: 110,
-                    child: Text(widget.product!['title'], maxLines: 2)),
+                  width: _width - 100.0,
+                  child: Text(
+                    widget.product!['title'],
+                    maxLines: 2,
+                    style: GoogleFonts.ptSerif(
+                      fontSize: 22,
+                      color: Colors.black,
+                      fontWeight: FontWeight.w500,
+                    ),
+                  ),
+                ),
+                Padding(padding: EdgeInsets.only(top: 20)),
+                SizedBox(
+                  width: _width - 100.0,
+                  child: Row(
+                    children: [
+                      SizedBox(
+                        width: 65,
+                        child: Column(
+                          children: [
+                            Text(
+                              'Ürün',
+                              style: GoogleFonts.ptSerif(
+                                fontSize: 18,
+                                color: Colors.black,
+                                fontWeight: FontWeight.w500,
+                              ),
+                            ),
+                            Text(
+                              'Detayı',
+                              style: GoogleFonts.ptSerif(
+                                fontSize: 18,
+                                color: Colors.black,
+                                fontWeight: FontWeight.w500,
+                              ),
+                            )
+                          ],
+                        ),
+                      ),
+                      VerticalDivider(
+                        width: 20,
+                      ),
+                      SizedBox(
+                        width: 240,
+                        child: Column(
+                          children: [
+                            Text(
+                              widget.product!['detail'],
+                              maxLines: 6,
+                              style: GoogleFonts.ptSerif(
+                                fontSize: 16,
+                                color: Colors.black,
+                                fontWeight: FontWeight.w500,
+                              ),
+                            ),
+                          ],
+                        ),
+                      ),
+                    ],
+                  ),
+                ),
                 Padding(padding: EdgeInsets.all(3.0)),
-                Text(widget.product!['price']),
+                SizedBox(
+                  width: _width - 80.0,
+                  child: Row(
+                    mainAxisAlignment: MainAxisAlignment.center,
+                    children: [
+                      Text(
+                        'Fiyat:',
+                        style: GoogleFonts.ptSerif(
+                          fontSize: 26,
+                          color: Colors.black,
+                          fontWeight: FontWeight.w500,
+                        ),
+                      ),
+                      Padding(padding: EdgeInsets.only(right: 10.0)),
+                      Text(
+                        '$product_price',
+                        style: GoogleFonts.ptSerif(
+                          fontSize: 26,
+                          color: Colors.black,
+                          fontWeight: FontWeight.w500,
+                        ),
+                      ),
+                      Padding(padding: EdgeInsets.only(right: 10)),
+                      Text(
+                        'Tl',
+                        style: GoogleFonts.ptSerif(
+                          fontSize: 24,
+                          color: Colors.black,
+                          fontWeight: FontWeight.w500,
+                        ),
+                      )
+                    ],
+                  ),
+                ),
                 Padding(
                   padding: EdgeInsets.all(1.0),
                 ),
                 ElevatedButton(
-                    onPressed: () {
-                      /* Navigator.pop(context,
-                      MaterialPageRoute(builder: (context) => Main_Screen()));*/
-                    },
-                    child: Text('Tıkla')),
+                    onPressed: () {},
+                    style: ElevatedButton.styleFrom(primary: Colors.green),
+                    child: Text(
+                      'Sepete Ekle',
+                      style: GoogleFonts.ptSerif(
+                          fontSize: 22, color: Colors.amber),
+                    )),
+                Padding(padding: EdgeInsets.only(bottom: 15))
               ]),
             )
           ],
@@ -145,95 +211,3 @@ class _Product_DetailState extends State<Product_Detail> {
     );
   }
 }
-/*SafeArea(
-        child: Container(
-          decoration: BoxDecoration(color: Color.fromARGB(255, 112, 125, 190)),
-          child: Column(
-            mainAxisAlignment: MainAxisAlignment.center,
-            children: [
-              Flexible(
-                flex: 3,
-                fit: FlexFit.loose,
-                child: Column(
-                  mainAxisSize: MainAxisSize.max,
-                  children: [
-                    ClipRRect(
-                      borderRadius: BorderRadius.circular(20.0),
-                      child: Image.asset(
-                        'lib/assets/set01.jpg',
-                        //  width: 140,
-                        fit: BoxFit.cover,
-                        width: 300,
-                        // width: double.infinity,
-                      ),
-                    ),
-                    //  Text('ürünad'),
-                    //      Text('fiyat'),
-                    Padding(
-                      padding: EdgeInsets.all(5.0),
-                    ),
-                    //  ElevatedButton(onPressed: () {}, child: Text('Tıkla')),
-                  ],
-                ),
-              ),
-              Flexible(
-                  flex: 3,
-                  child: Row(
-                    mainAxisAlignment: MainAxisAlignment.spaceAround,
-                    children: [
-                      Text(
-                        'ürün avdvddvvsd',
-                        style: GoogleFonts.lato(fontSize: 48),
-                      ),
-                      Text(
-                        'fiyat',
-                        style: GoogleFonts.lato(fontSize: 48),
-                      ),
-                      ElevatedButton(onPressed: () {}, child: Text('Tıkla')),
-                    ],
-                  )),
-              Flexible(
-                flex: 1,
-                child: Container(
-                  decoration: BoxDecoration(color: Colors.pink),
-                  child: Row(
-                    mainAxisSize: MainAxisSize.max,
-                    crossAxisAlignment: CrossAxisAlignment.start,
-                    mainAxisAlignment: MainAxisAlignment.spaceEvenly,
-                    children: [
-                      IconButton(
-                        onPressed: _launchURLFace,
-                        icon: const FaIcon(
-                          FontAwesomeIcons.facebook,
-                          size: 12,
-                        ),
-                      ),
-                      IconButton(
-                        onPressed: _launchURLInsta,
-                        icon: const FaIcon(
-                          FontAwesomeIcons.instagram,
-                          size: 12,
-                        ),
-                      ),
-                      IconButton(
-                        onPressed: _launchURLTwitter,
-                        icon: const FaIcon(
-                          FontAwesomeIcons.twitter,
-                          size: 12,
-                        ),
-                      ),
-                      IconButton(
-                        onPressed: _launchURLYoutube,
-                        icon: const FaIcon(
-                          FontAwesomeIcons.youtube,
-                          size: 12,
-                        ),
-                      ),
-                    ],
-                  ),
-                ),
-              ),
-            ],
-          ),
-        ),
-      ),*/
